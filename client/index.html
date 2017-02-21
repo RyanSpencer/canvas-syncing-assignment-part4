@@ -2,12 +2,69 @@
 <html lang="en">
 <head>
     <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script type="text/babel" >
         "use strict";
-    
+        let canvas, ctx, sendBufferCanvas, sendBufferCtx, socket;
+
+        const setup = () => {
+            sendBufferCanvas = document.createElement("canvas");
+            sendBufferCanvas.height = 200;
+            sendBufferCanvas.width = 200;
+            sendBufferCtx = sendBufferCanvas.getContext("2d");
+            
+            let x = Math.floor(Math.random() * (200 - 10) + 10);
+            let y = Math.floor(Math.random() * (200 - 10) + 10);
+            
+            ctx.fillStyle = 'black';
+            ctx.fillRect(x, y, 100, 100);
+            sendBufferCtx.fillStyle = 'red';
+            sendBufferCtx.fillRect(0, 0, 100, 100);
+            
+            const data = {
+                x: x,
+                y: y,
+                height: 200,
+                width: 200,
+                imgData : sendBufferCanvas.toDataURL(),
+            };            
+            socket.emit("draw", data);
+        };
+
+        const handleMessage = (data) => {
+            let image = new Image();
+            
+            console.log(data);
+            
+            image.onload = () => {
+                ctx.save();
+                ctx.globalCompositeOperation = "source-over";
+                ctx.drawImage(image, data.x, data.y, data.width, data.height);
+                ctx.restore();
+            };
+            
+            image.src = data.imgData;
+        };
+
+        const init = () => {
+            canvas = document.querySelector("#canvas");
+            ctx = canvas.getContext('2d');
+            socket = io.connect();
+            
+            socket.on('connect', () => {
+                console.log('connecting');
+                socket.emit('join', {});
+                setup();
+            });
+            
+            socket.on('msg', (data) => {
+                handleMessage(data);
+            });
+        };
+        window.onload = init;
     </script>
 </head>
 <body>
-
+    <canvas id="canvas" height="640" width="480"></canvas>
 </body>
 </html>

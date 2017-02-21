@@ -1,0 +1,29 @@
+{
+  "name": "canvas-syncing-assignment-part4",
+  "version": "1.0.0",
+  "description": "Canvas Syncing part 4",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \\\"Tests complete\\\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanSpencer/canvas-syncing-assignment-part4.git"
+  },
+  "author": "Ryan Spencer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RyanSpencer/canvas-syncing-assignment-part4/issues"
+  },
+  "homepage": "https://github.com/RyanSpencer/canvas-syncing-assignment-part4#readme",
+  "dependencies": {
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0"
+  }
+}
